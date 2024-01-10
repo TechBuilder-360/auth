@@ -1,4 +1,4 @@
-module auth-server-sdk
+module github.com/TechBuilder-360/auth-server-sdk
 
 go 1.21.5
 
