@@ -3,15 +3,7 @@ package auth_server_sdk
 import (
 	"context"
 	"fmt"
-	"github.com/go-resty/resty/v2"
 )
-
-var client *resty.Client
-
-func init() {
-	// Create a Resty Client
-	client = resty.New()
-}
 
 func (c *Config) Registration(ctx context.Context, payload RegistrationRequest) *Response {
 	result := new(Response)
