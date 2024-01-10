@@ -6,11 +6,15 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+var client *resty.Client
+
+func init() {
+	// Create a Resty Client
+	client = resty.New()
+}
+
 func (c *Config) Registration(ctx context.Context, payload RegistrationRequest) *Response {
 	result := new(Response)
-
-	// Create a Resty Client
-	client := resty.New()
 
 	_, err := client.R().
 		EnableTrace().
@@ -34,9 +38,6 @@ func (c *Config) Registration(ctx context.Context, payload RegistrationRequest) 
 
 func (c *Config) ActivateEmail(ctx context.Context, token string) *Response {
 	result := new(Response)
-
-	// Create a Resty Client
-	client := resty.New()
 
 	_, err := client.R().
 		EnableTrace().
@@ -64,9 +65,6 @@ func (c *Config) Authenticate(ctx context.Context, emailAddress string) *Respons
 	payload := emailRequest{
 		EmailAddress: emailAddress,
 	}
-
-	// Create a Resty Client
-	client := resty.New()
 
 	_, err := client.R().
 		EnableTrace().
@@ -96,9 +94,6 @@ func (c *Config) Login(ctx context.Context, emailAddress, otp string) *Response 
 		Otp:          otp,
 	}
 
-	// Create a Resty Client
-	client := resty.New()
-
 	_, err := client.R().
 		EnableTrace().
 		SetHeader("x-auth", c.SecretKey).
@@ -127,9 +122,6 @@ func (c *Config) RefreshToken(ctx context.Context, token, refreshToken string) *
 		RefreshToken: refreshToken,
 	}
 
-	// Create a Resty Client
-	client := resty.New()
-
 	_, err := client.R().
 		EnableTrace().
 		SetHeader("x-auth", c.SecretKey).
@@ -152,9 +144,6 @@ func (c *Config) RefreshToken(ctx context.Context, token, refreshToken string) *
 
 func (c *Config) Logout(ctx context.Context, token string) *Response {
 	result := new(Response)
-
-	// Create a Resty Client
-	client := resty.New()
 
 	_, err := client.R().
 		EnableTrace().
@@ -179,9 +168,6 @@ func (c *Config) Logout(ctx context.Context, token string) *Response {
 func (c *Config) ValidateToken(ctx context.Context, token string) bool {
 	result := new(Response)
 
-	// Create a Resty Client
-	client := resty.New()
-
 	resp, err := client.R().
 		EnableTrace().
 		SetAuthToken(token).
@@ -189,11 +175,57 @@ func (c *Config) ValidateToken(ctx context.Context, token string) bool {
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
-		Put(fmt.Sprintf("%s/auth/validate-token", c.URL))
+		Get(fmt.Sprintf("%s/auth/validate-token", c.URL))
 
 	if err != nil || resp.IsError() {
 		return false
 	}
 
 	return true
+}
+
+func (c *Config) GetUser(ctx context.Context, id string) *Response {
+	result := new(Response)
+
+	_, err := client.R().
+		EnableTrace().
+		SetHeader("x-auth", c.SecretKey).
+		SetContext(ctx).
+		SetResult(result).
+		SetError(result).
+		SetPathParam("id", id).
+		Get(fmt.Sprintf("%s/users/{id}", c.URL))
+
+	if err != nil {
+		return &Response{
+			Status:  false,
+			Message: "request failed",
+			Error:   err.Error(),
+		}
+	}
+
+	return result
+}
+
+func (c *Config) GetUserByEmail(ctx context.Context, email string) *Response {
+	result := new(Response)
+
+	_, err := client.R().
+		EnableTrace().
+		SetHeader("x-auth", c.SecretKey).
+		SetContext(ctx).
+		SetResult(result).
+		SetError(result).
+		SetQueryParam("email", email).
+		Get(fmt.Sprintf("%s/users", c.URL))
+
+	if err != nil {
+		return &Response{
+			Status:  false,
+			Message: "request failed",
+			Error:   err.Error(),
+		}
+	}
+
+	return result
 }
