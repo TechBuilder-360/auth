@@ -10,7 +10,7 @@ type Config struct {
 	SecretKey string
 }
 
-type config interface {
+type IAuth interface {
 	Registration(ctx context.Context, payload RegistrationRequest) *Response
 	ActivateEmail(ctx context.Context, token string) *Response
 	Authenticate(ctx context.Context, emailAddress string) *Response
@@ -22,7 +22,7 @@ type config interface {
 	GetUserByEmail(ctx context.Context, email string) *Response
 }
 
-func New(config Config) *Config {
+func New(config Config) IAuth {
 	return &config
 }
 
