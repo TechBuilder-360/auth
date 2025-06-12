@@ -2,12 +2,13 @@ package auth_server_sdk
 
 import (
 	"context"
+
 	"github.com/go-resty/resty/v2"
 )
 
 type Config struct {
-	URL       string
-	SecretKey string
+	URL    string
+	APIKey string
 }
 
 type IAuth interface {
