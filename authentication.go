@@ -10,7 +10,7 @@ func (c *Config) Registration(ctx context.Context, payload RegistrationRequest) 
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetBody(&payload).
 		SetResult(result).
@@ -33,7 +33,7 @@ func (c *Config) ActivateEmail(ctx context.Context, token string) *Response {
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
@@ -60,7 +60,7 @@ func (c *Config) Authenticate(ctx context.Context, emailAddress string) *Respons
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetBody(&payload).
 		SetResult(result).
@@ -88,7 +88,7 @@ func (c *Config) Login(ctx context.Context, emailAddress, otp string) *Response 
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetBody(&payload).
 		SetResult(result).
@@ -116,7 +116,7 @@ func (c *Config) RefreshToken(ctx context.Context, token, refreshToken string) *
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetBody(&payload).
 		SetResult(result).
@@ -140,7 +140,7 @@ func (c *Config) Logout(ctx context.Context, token string) *Response {
 	_, err := client.R().
 		EnableTrace().
 		SetAuthToken(token).
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
@@ -163,7 +163,7 @@ func (c *Config) ValidateToken(ctx context.Context, token string) bool {
 	resp, err := client.R().
 		EnableTrace().
 		SetAuthToken(token).
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
@@ -181,7 +181,7 @@ func (c *Config) GetUser(ctx context.Context, id string) *Response {
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
@@ -204,7 +204,7 @@ func (c *Config) GetUserByEmail(ctx context.Context, email string) *Response {
 
 	_, err := client.R().
 		EnableTrace().
-		SetHeader("x-auth", c.SecretKey).
+		SetHeader("x-auth", c.APIKey).
 		SetContext(ctx).
 		SetResult(result).
 		SetError(result).
